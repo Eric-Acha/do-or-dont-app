@@ -1,16 +1,41 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Community Decisions</h1>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="fw-bold">Community Decisions</h1>
+
+    {% if current_user.is_authenticated %}
+        <a href="{{ url_for('main.create_post') }}" class="btn btn-primary">
+            Create Post
+        </a>
+    {% endif %}
+</div>
 
 {% for post in posts %}
-<div class="card">
-    <h2>{{ post.title }}</h2>
-    <p>{{ post.content[:150] }}...</p>
-    <p>Category: {{ post.category }}</p>
-    <a href="{{ url_for('main.post_detail', post_id=post.id) }}">View Discussion</a>
+<div class="card shadow-sm mb-3">
+    <div class="card-body">
+        <h4 class="card-title">{{ post.title }}</h4>
+
+        <p class="text-muted mb-1">
+            Posted by 
+            <a href="{{ url_for('main.profile', username=post.author.username) }}">
+                {{ post.author.username }}
+            </a>
+            | {{ post.category }}
+        </p>
+
+        <p class="card-text">{{ post.content[:180] }}...</p>
+
+        <a href="{{ url_for('main.post_detail', post_id=post.id) }}" class="btn btn-outline-dark">
+            View Discussion
+        </a>
+    </div>
 </div>
 {% else %}
-<p>No posts yet. Be the first to create one.</p>
+<div class="alert alert-info">
+    No posts yet. Be the first to create one.
+</div>
 {% endfor %}
+
 {% endblock %} 

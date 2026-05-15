@@ -1,7 +1,8 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
 from app import db
-from app.models import Post, Vote, Comment
+from app.models import User, Post, Vote, Comment
+from flask import abort 
 
 main = Blueprint("main", __name__)
 
@@ -92,3 +93,57 @@ def comment(post_id):
     db.session.commit()
 
     return redirect(url_for("main.post_detail", post_id=post_id)) 
+
+@main.route("/post/<int:post_id>/edit", methods=["GET", "POST"])
+@login_required
+def edit_post(post_id):
+    post = Post.query.get_or_404(post_id)
+
+    if post.user_id != current_user.id and not current_user.is_admin:
+        abort(403)
+
+    if request.method == "POST":
+        post.title = request.form["title"]
+        post.content = request.form["content"]
+        post.category = request.form.get("category")
+
+        db.session.commit()
+
+        flash("Post updated successfully.")
+        return redirect(url_for("main.post_detail", post_id=post.id))
+
+    return render_template("edit_post.html", post=post)
+
+
+@main.route("/post/<int:post_id>/delete", methods=["POST"])
+@login_required
+def delete_post(post_id):
+    post = Post.query.get_or_404(post_id)
+
+    if post.user_id != current_user.id and not current_user.is_admin:
+        abort(403)
+
+    db.session.delete(post)
+    db.session.commit()
+
+    flash("Post deleted successfully.")
+    return redirect(url_for("main.index")) 
+
+@main.route("/profile/<username>")
+def profile(username):
+    user = User.query.filter_by(username=username).first_or_404()
+
+    posts = Post.query.filter_by(user_id=user.id).order_by(Post.created_at.desc()).all()
+
+    total_posts = Post.query.filter_by(user_id=user.id).count()
+    total_comments = Comment.query.filter_by(user_id=user.id).count()
+    total_votes = Vote.query.filter_by(user_id=user.id).count()
+
+    return render_template(
+        "profile.html",
+        user=user,
+        posts=posts,
+        total_posts=total_posts,
+        total_comments=total_comments,
+        total_votes=total_votes
+    ) 

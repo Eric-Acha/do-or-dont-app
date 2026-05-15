@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h1 class="fw-bold">{{ user.username }}</h1>
+        <p class="text-muted">{{ user.email }}</p>
+
+        <div class="row text-center mt-4">
+            <div class="col-md-4">
+                <h3>{{ total_posts }}</h3>
+                <p class="text-muted">Posts</p>
+            </div>
+
+            <div class="col-md-4">
+                <h3>{{ total_comments }}</h3>
+                <p class="text-muted">Comments</p>
+            </div>
+
+            <div class="col-md-4">
+                <h3>{{ total_votes }}</h3>
+                <p class="text-muted">Votes</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2 class="fw-bold mb-3">Posts by {{ user.username }}</h2>
+
+{% for post in posts %}
+<div class="card shadow-sm mb-3">
+    <div class="card-body">
+        <h4>{{ post.title }}</h4>
+        <p class="text-muted">{{ post.category }}</p>
+        <p>{{ post.content[:180] }}...</p>
+
+        <a href="{{ url_for('main.post_detail', post_id=post.id) }}" class="btn btn-outline-dark">
+            View Post
+        </a>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info">
+    This user has not created any posts yet.
+</div>
+{% endfor %}
+
+{% endblock %} 

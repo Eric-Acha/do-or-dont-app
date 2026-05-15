@@ -1,22 +1,37 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Create a Do or Don’t Post</h1>
 
-<form method="POST">
-    <input type="text" name="title" placeholder="Title" required>
+<div class="card shadow-sm">
+    <div class="card-body">
+        <h2 class="fw-bold mb-4">Create a Do or Dont Post</h2>
 
-    <select name="category">
-        <option value="Relationships">Relationships</option>
-        <option value="Career">Career</option>
-        <option value="Money">Money</option>
-        <option value="Ethics">Ethics</option>
-        <option value="Technology">Technology</option>
-        <option value="Other">Other</option>
-    </select>
+        <form method="POST">
+            <div class="mb-3">
+                <label class="form-label">Title</label>
+                <input type="text" name="title" class="form-control" required>
+            </div>
 
-    <textarea name="content" placeholder="Share your story..." required></textarea>
+            <div class="mb-3">
+                <label class="form-label">Category</label>
+                <select name="category" class="form-select">
+                    <option value="Relationships">Relationships</option>
+                    <option value="Career">Career</option>
+                    <option value="Money">Money</option>
+                    <option value="Ethics">Ethics</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
 
-    <button type="submit">Post</button>
-</form>
-{% endblock %} 
+            <div class="mb-3">
+                <label class="form-label">Your Story</label>
+                <textarea name="content" class="form-control" rows="6" required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Publish Post</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
