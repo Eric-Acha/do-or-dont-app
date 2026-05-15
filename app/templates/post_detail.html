@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{ post.title }}</h1>
+<p>{{ post.content }}</p>
+<p>Category: {{ post.category }}</p>
+
+<h2>Community Vote</h2>
+
+<form method="POST" action="{{ url_for('main.vote', post_id=post.id, vote_type='Do') }}">
+    <button type="submit">Do</button>
+</form>
+
+<form method="POST" action="{{ url_for('main.vote', post_id=post.id, vote_type='Dont') }}">
+    <button type="submit">Don’t</button>
+</form>
+
+<p>Do: {{ do_votes }} votes — {{ do_percent }}%</p>
+<p>Don’t: {{ dont_votes }} votes — {{ dont_percent }}%</p>
+
+<h2>Comments</h2>
+
+{% for comment in post.comments %}
+<div class="comment">
+    <p>{{ comment.content }}</p>
+    <small>By {{ comment.author.username }}</small>
+</div>
+{% endfor %}
+
+{% if current_user.is_authenticated %}
+<form method="POST" action="{{ url_for('main.comment', post_id=post.id) }}">
+    <textarea name="content" placeholder="Add your comment..." required></textarea>
+    <button type="submit">Comment</button>
+</form>
+{% endif %}
+{% endblock %}

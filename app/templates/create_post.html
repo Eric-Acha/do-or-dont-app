@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Create a Do or Don’t Post</h1>
+
+<form method="POST">
+    <input type="text" name="title" placeholder="Title" required>
+
+    <select name="category">
+        <option value="Relationships">Relationships</option>
+        <option value="Career">Career</option>
+        <option value="Money">Money</option>
+        <option value="Ethics">Ethics</option>
+        <option value="Technology">Technology</option>
+        <option value="Other">Other</option>
+    </select>
+
+    <textarea name="content" placeholder="Share your story..." required></textarea>
+
+    <button type="submit">Post</button>
+</form>
+{% endblock %} 
